@@ -1,10 +1,11 @@
 package com.simswapping.controller;
 
 import com.simswapping.model.BodyAccount;
+import com.simswapping.model.BodyLogin;
 import com.simswapping.model.ResponseAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.simswapping.service.RegisterService;
+import com.simswapping.service.SimSwappingService;
 
 import java.io.IOException;
 
@@ -13,15 +14,24 @@ import java.io.IOException;
 public class SimSwappingController {
 
     @Autowired
-    private RegisterService registerService;
+    private SimSwappingService simSwappingService;
 
     @ResponseBody
     @RequestMapping(value = "account", method = RequestMethod.POST)
-    public ResponseAccount solicitudRestaurar(@RequestBody BodyAccount bodyAccount) throws IOException {
+    public Integer solicitudRestaurar(@RequestBody BodyAccount bodyAccount) throws IOException {
+        return simSwappingService.registerAccount(bodyAccount);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public ResponseAccount login(@RequestBody BodyLogin bodyLogin) throws IOException {
         ResponseAccount responseAccount = new ResponseAccount();
-        Integer result = registerService.registerAccount(bodyAccount);
-        responseAccount.setSuccess(result == 0);
+
+        simSwappingService.login(bodyLogin);
         return responseAccount;
 
     }
+
+
+
 }

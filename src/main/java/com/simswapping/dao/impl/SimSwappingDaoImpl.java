@@ -1,7 +1,9 @@
 package com.simswapping.dao.impl;
 
-import com.simswapping.dao.RegisterDao;
+import com.simswapping.dao.SimSwappingDao;
 import com.simswapping.model.BodyAccount;
+import com.simswapping.model.BodyLogin;
+import com.simswapping.model.ResponseLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -14,7 +16,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterDaoImpl implements RegisterDao {
+public class SimSwappingDaoImpl implements SimSwappingDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -42,6 +44,28 @@ public class RegisterDaoImpl implements RegisterDao {
         inParamMap.put("in_latitude", bodyAccount.getLatitude());
         inParamMap.put("in_longitude", bodyAccount.getLongitude());
         inParamMap.put("in_imei", bodyAccount.getImei());
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        result = jdbcCall.executeObject(Integer.class, in);
+        return result;
+    }
+
+    @Override
+    public Integer login(BodyLogin bodyLogin) {
+        Integer result = 0;
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        jdbcCall.withSchemaName("sch_simulator");
+        jdbcCall.withProcedureName("sp_validate_login");
+        jdbcCall.withoutProcedureColumnMetaDataAccess();
+        jdbcCall.declareParameters(
+                new SqlParameter("in_acc", Types.VARCHAR),
+                new SqlParameter("in_passcode", Types.VARCHAR),
+                new SqlParameter("in_latitude", Types.VARCHAR),
+                new SqlOutParameter("in_longitude", Types.VARCHAR));
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("in_acc", bodyLogin.getAcc());
+        inParamMap.put("in_passcode", bodyLogin.getPasscode());
+        inParamMap.put("in_latitude", bodyLogin.getLatitude());
+        inParamMap.put("in_longitude", bodyLogin.getLongitude());
         SqlParameterSource in = new MapSqlParameterSource(inParamMap);
         result = jdbcCall.executeObject(Integer.class, in);
         return result;
