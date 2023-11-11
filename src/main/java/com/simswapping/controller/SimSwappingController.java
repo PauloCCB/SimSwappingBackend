@@ -1,10 +1,10 @@
-package controller;
+package com.simswapping.controller;
 
-import model.BodyAccount;
-import model.ResponseAccount;
+import com.simswapping.model.BodyAccount;
+import com.simswapping.model.ResponseAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.RegisterService;
+import com.simswapping.service.RegisterService;
 
 import java.io.IOException;
 

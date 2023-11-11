@@ -1,12 +1,11 @@
-package service.impl;
+package com.simswapping.service.impl;
 
-import dao.RegisterDao;
-import model.BodyAccount;
-import model.ResponseAccount;
+import com.simswapping.dao.RegisterDao;
+import com.simswapping.model.BodyAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import service.RegisterService;
+import com.simswapping.service.RegisterService;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {

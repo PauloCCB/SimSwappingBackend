@@ -1,4 +1,4 @@
-package model;
+package com.simswapping.model;
 
 
 import java.io.Serializable;
@@ -10,6 +10,16 @@ public class BodyAccount implements Serializable {
     private String cc;
     private String latitude;
     private String longitude;
+
+    private String imei;
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
 
     public String getNombre() {
         return nombre;

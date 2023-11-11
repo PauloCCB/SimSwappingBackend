@@ -1,4 +1,4 @@
-package util;
+package com.simswapping.util;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 

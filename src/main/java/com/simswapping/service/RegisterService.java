@@ -1,8 +1,7 @@
-package service;
+package com.simswapping.service;
 
 
-import model.BodyAccount;
-import model.ResponseAccount;
+import com.simswapping.model.BodyAccount;
 
 public interface RegisterService {
 

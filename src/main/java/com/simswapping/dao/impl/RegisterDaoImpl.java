@@ -1,8 +1,7 @@
-package dao.impl;
+package com.simswapping.dao.impl;
 
-import dao.RegisterDao;
-import model.BodyAccount;
-import model.ResponseAccount;
+import com.simswapping.dao.RegisterDao;
+import com.simswapping.model.BodyAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -34,13 +33,15 @@ public class RegisterDaoImpl implements RegisterDao {
                 new SqlParameter("in_apellido", Types.VARCHAR),
                 new SqlParameter("in_cc", Types.VARCHAR),
                 new SqlOutParameter("in_latitude", Types.VARCHAR),
-                new SqlOutParameter("in_longitude", Types.VARCHAR));
+                new SqlOutParameter("in_longitude", Types.VARCHAR),
+                new SqlOutParameter("in_imei", Types.VARCHAR));
         Map<String, Object> inParamMap = new HashMap<String, Object>();
         inParamMap.put("in_nombre", bodyAccount.getNombre());
         inParamMap.put("in_apellido", bodyAccount.getApellido());
         inParamMap.put("in_cc", bodyAccount.getCc());
         inParamMap.put("in_latitude", bodyAccount.getLatitude());
         inParamMap.put("in_longitude", bodyAccount.getLongitude());
+        inParamMap.put("in_imei", bodyAccount.getImei());
         SqlParameterSource in = new MapSqlParameterSource(inParamMap);
         result = jdbcCall.executeObject(Integer.class, in);
         return result;

@@ -1,4 +1,4 @@
-package model;
+package com.simswapping.model;
 
 public class ResponseAccount {
 

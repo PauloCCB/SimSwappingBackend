@@ -1,7 +1,6 @@
-package dao;
+package com.simswapping.dao;
 
-import model.BodyAccount;
-import model.ResponseAccount;
+import com.simswapping.model.BodyAccount;
 
 public interface RegisterDao {
 
