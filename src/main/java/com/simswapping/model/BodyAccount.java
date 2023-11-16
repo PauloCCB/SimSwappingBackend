@@ -5,13 +5,30 @@ import java.io.Serializable;
 
 public class BodyAccount implements Serializable {
 
+    private String dni;
     private String nombre;
     private String apellido;
     private String cc;
     private String latitude;
     private String longitude;
-
     private String imei;
+    private String pin;
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
     public String getImei() {
         return imei;
