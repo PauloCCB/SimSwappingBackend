@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class BodyLogin implements Serializable {
     private String acc;
-    private String passcode;
+    private String pin;
     private String latitude;
     private String longitude;
 
@@ -32,11 +32,11 @@ public class BodyLogin implements Serializable {
         this.acc = acc;
     }
 
-    public String getPasscode() {
-        return passcode;
+    public String getPin() {
+        return pin;
     }
 
-    public void setPasscode(String passcode) {
-        this.passcode = passcode;
+    public void setPin(String passcode) {
+        this.pin = passcode;
     }
 }
