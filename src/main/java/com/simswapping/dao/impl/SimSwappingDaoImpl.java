@@ -61,13 +61,11 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
         jdbcCall.declareParameters(
                 new SqlParameter("in_acc", Types.VARCHAR),
                 new SqlParameter("in_pin", Types.VARCHAR),
-                new SqlParameter("in_latitude", Types.VARCHAR),
-                new SqlOutParameter("in_longitude", Types.VARCHAR));
+                new SqlOutParameter("resultado", Types.VARCHAR));
         Map<String, Object> inParamMap = new HashMap<String, Object>();
         inParamMap.put("in_acc", bodyLogin.getAcc());
         inParamMap.put("in_pin", bodyLogin.getPin());
-        inParamMap.put("in_latitude", bodyLogin.getLatitude());
-        inParamMap.put("in_longitude", bodyLogin.getLongitude());
+
         SqlParameterSource in = new MapSqlParameterSource(inParamMap);
         result = jdbcCall.executeObject(Integer.class, in);
         return result;
