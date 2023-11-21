@@ -4,10 +4,13 @@ import com.simswapping.dao.SimSwappingDao;
 import com.simswapping.model.BodyAccount;
 import com.simswapping.model.BodyLogin;
 import com.simswapping.model.ResponseLogin;
+import com.simswapping.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.simswapping.service.SimSwappingService;
+
+import java.util.List;
 
 @Service
 public class SimSwappingServiceImpl implements SimSwappingService {
@@ -22,7 +25,7 @@ public class SimSwappingServiceImpl implements SimSwappingService {
     }
 
     @Override
-    public Integer login(BodyLogin bodyLogin) {
+    public List<Usuario> login(BodyLogin bodyLogin) throws Exception{
         return simSwappingDao.login(bodyLogin);
     }
 
