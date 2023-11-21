@@ -42,6 +42,8 @@ public class SimSwappingController {
 
                 if(objUsuario!=null) {
                     responseAccount.setUsuario(objUsuario);
+
+
                     if (Utils.isOnRadio(bodyLogin.getLatitude(), bodyLogin.getLongitude(), objUsuario.getLatitude(), objUsuario.getLatitude())) {
                         responseAccount.setSuccess(true); //Está dentro del radio
                     } else {

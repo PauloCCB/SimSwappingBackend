@@ -8,6 +8,16 @@ public class BodyLogin implements Serializable {
     private double latitude;
     private double longitude;
 
+    private String imei;
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
     public double getLatitude() {
         return latitude;
     }
