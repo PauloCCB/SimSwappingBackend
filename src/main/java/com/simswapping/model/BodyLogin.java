@@ -3,7 +3,7 @@ package com.simswapping.model;
 import java.io.Serializable;
 
 public class BodyLogin implements Serializable {
-    private String acc;
+    private String cc;
     private String pin;
     private double latitude;
     private double longitude;
@@ -34,12 +34,12 @@ public class BodyLogin implements Serializable {
         this.longitude = longitude;
     }
 
-    public String getAcc() {
-        return acc;
+    public String getCc() {
+        return cc;
     }
 
-    public void setAcc(String acc) {
-        this.acc = acc;
+    public void setCc(String cc) {
+        this.cc = cc;
     }
 
     public String getPin() {

@@ -74,7 +74,7 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
 
         jdbcCall.returningResultSet("RESULT_SET", BeanPropertyRowMapper.newInstance(Usuario.class));
         Map<String, Object> inParamMap = new HashMap<String, Object>();
-        inParamMap.put("in_acc", bodyLogin.getAcc());
+        inParamMap.put("in_acc", bodyLogin.getCc());
         inParamMap.put("in_pin", bodyLogin.getPin());
         inParamMap.put("in_imei", bodyLogin.getImei());
 
