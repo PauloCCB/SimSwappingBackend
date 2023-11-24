@@ -20,6 +20,14 @@ public class Utils {
         return EARTH_RADIUS * c;
     }
 
+    /**
+     *
+     * @param latitudReferencia
+     * @param longitudReferencia
+     * @param latitudPunto
+     * @param longitudPunto
+     * @return "Retorna true cuando esta dentro del radio y false cuando no lo está
+     */
     public static boolean isOnRadio(double latitudReferencia,
                                     double longitudReferencia,
                                     double latitudPunto,

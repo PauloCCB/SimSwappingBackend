@@ -1,9 +1,6 @@
 package com.simswapping.controller;
 
-import com.simswapping.model.BodyAccount;
-import com.simswapping.model.BodyLogin;
-import com.simswapping.model.ResponseAccount;
-import com.simswapping.model.Usuario;
+import com.simswapping.model.*;
 import com.simswapping.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +19,7 @@ public class SimSwappingController {
     private SimSwappingService simSwappingService;
 
     @ResponseBody
-    @RequestMapping(value = "register_account", method = RequestMethod.POST)
+    @RequestMapping(value = "registerAccount", method = RequestMethod.POST)
     public ResponseEntity registerAccount(@RequestBody BodyAccount bodyAccount) throws IOException {
         try {
             if (simSwappingService.registerAccount(bodyAccount) == 1) {
@@ -36,30 +33,60 @@ public class SimSwappingController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "login", method = RequestMethod.POST)
+    @RequestMapping(value = "createOperation", method = RequestMethod.POST)
+    public ResponseEntity createOoperation(@RequestBody BodyOperation bodyOperation) throws IOException {
+        try{
+
+            //1. Validamos Huella digital
+
+            //2. Validamos radio de Geolocalización
+                //Obtenemos datos del usuario
+            Usuario objUsuario =  simSwappingService.getDataUsuario(bodyOperation.getId_usuario());
+
+            if (Utils.isOnRadio(bodyOperation.getLatitud(), bodyOperation.getLongitud(),
+                    objUsuario.getLatitude(), objUsuario.getLatitude())) {
+
+            }
+            //3. Mensaje de texto para confirmar operación
+
+
+            if(simSwappingService.createOperation(bodyOperation) == 1){
+                return ResponseEntity.ok("Registro exitoso");
+            }else {
+                return ResponseEntity.ok("Error al crear la operación");
+            }
+
+        } catch (Exception e){
+            return ResponseEntity.ok(e.getMessage());
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "validateLogin", method = RequestMethod.POST)
     public ResponseEntity<ResponseAccount> login(@RequestBody BodyLogin bodyLogin) throws IOException {
         ResponseAccount responseAccount = new ResponseAccount();
 
         Usuario objUsuario = null;
         try {
             List<Usuario> lstUsuario = simSwappingService.login(bodyLogin);
-            if(lstUsuario != null){
-                if(lstUsuario.size() > 0){
-                    objUsuario = lstUsuario.get(0);
-                }
+            if(lstUsuario != null && lstUsuario.size() > 0){
+                objUsuario = lstUsuario.get(0);
 
                 if(objUsuario!=null) {
                     responseAccount.setUsuario(objUsuario);
 
-
                     if (Utils.isOnRadio(bodyLogin.getLatitude(), bodyLogin.getLongitude(), objUsuario.getLatitude(), objUsuario.getLatitude())) {
-                        responseAccount.setSuccess(true); //Está dentro del radio
+                        responseAccount.setSuccess(false);//Está dentro del radio y debería fallar
+                        responseAccount.setMessage("Cuenta fuera de la ubicación permitida, su cuenta acaba de ser bloqueada");
                     } else {
-                        responseAccount.setSuccess(false);
+                        responseAccount.setSuccess(true);
+                        responseAccount.setMessage("Inicio de sesión con éxito.");
                     }
                 }
-            }else {
+            } else {
                 responseAccount.setSuccess(false);
+                responseAccount.setMessage("Usuario no válido");
             }
 
         } catch (Exception e) {

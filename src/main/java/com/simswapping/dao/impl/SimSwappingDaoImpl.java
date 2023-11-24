@@ -1,10 +1,7 @@
 package com.simswapping.dao.impl;
 
 import com.simswapping.dao.SimSwappingDao;
-import com.simswapping.model.BodyAccount;
-import com.simswapping.model.BodyLogin;
-import com.simswapping.model.ResponseLogin;
-import com.simswapping.model.Usuario;
+import com.simswapping.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -87,5 +84,56 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
         return usuarios;
     }
 
+    @Override
+    public Integer createOperation(BodyOperation bodyOperation) throws Exception {
 
+        Integer result = 0;
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        jdbcCall.withSchemaName("sch_simulator");
+        jdbcCall.withProcedureName("sp_create_operation");
+        jdbcCall.withoutProcedureColumnMetaDataAccess();
+        jdbcCall.declareParameters(
+                new SqlParameter("in_id_usuario", Types.VARCHAR),
+                new SqlParameter("in_monto", Types.DECIMAL),
+                new SqlParameter("in_cuenta_destino", Types.VARCHAR),
+                new SqlParameter("in_cuenta_origen", Types.VARCHAR),
+                new SqlOutParameter("resultado", Types.INTEGER));
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("in_id_usuario", bodyOperation.getId_usuario());
+        inParamMap.put("in_monto", bodyOperation.getMonto());
+        inParamMap.put("in_cuenta_destino", bodyOperation.getCuenta_destino());
+        inParamMap.put("in_cuenta_origen", bodyOperation.getCuenta_origen());
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        //jdbcCall.returningResultSet("resultado", cuentaDaoDefinition);
+        //return  (Cuenta) jdbcCall.executeObject(List.class, in).get(0);
+
+        result = jdbcCall.executeObject(Integer.class, in);
+        return result;
+
+    }
+
+
+    @Override
+    public Usuario getDataUsuario(Integer idUsuario) throws Exception {
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        jdbcCall.withSchemaName("sch_simulator");
+        jdbcCall.withProcedureName("sp_list_usuario_by_id");
+        jdbcCall.withoutProcedureColumnMetaDataAccess();
+        jdbcCall.declareParameters(
+                new SqlParameter("in_id_usuario", Types.INTEGER));
+        jdbcCall.returningResultSet("RESULT_SET", BeanPropertyRowMapper.newInstance(Usuario.class));
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("in_id_usuario", idUsuario);
+
+        Map<String, Object> result = jdbcCall.execute(inParamMap);
+
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        List<Usuario> lstUsuarios = (List<Usuario>) result.get("RESULT_SET");
+        if(lstUsuarios != null && lstUsuarios.size() > 0){
+            return lstUsuarios.get(0);
+        }else {
+            return null;
+        }
+
+    }
 }

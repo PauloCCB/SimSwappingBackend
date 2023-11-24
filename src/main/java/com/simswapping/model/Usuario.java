@@ -13,6 +13,16 @@ public class Usuario implements Serializable {
     private double longitude;
     private String imei;
 
+    private String telefono;
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     public String getNombre() {
         return nombre;
     }
