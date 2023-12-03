@@ -14,6 +14,7 @@ public class BodyAccount implements Serializable {
     private String imei;
     private String pin;
 
+
     public String getPin() {
         return pin;
     }
