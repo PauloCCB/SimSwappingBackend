@@ -86,16 +86,22 @@ public class SimSwappingController {
 
     @ResponseBody
     @RequestMapping(value = "registerAccount", method = RequestMethod.POST)
-    public ResponseEntity registerAccount(@RequestBody BodyAccount bodyAccount) throws IOException {
+    public ResponseEntity<ResponseAccount> registerAccount(@RequestBody BodyAccount bodyAccount) throws IOException {
+        ResponseAccount responseAccount = new ResponseAccount();
         try {
             if (simSwappingService.registerAccount(bodyAccount) == 1) {
-                return ResponseEntity.ok("Registro exitoso");
+                responseAccount.setMessage("Registro exitoso");
+                //return ResponseEntity.ok("Registro exitoso");
             } else {
-                return ResponseEntity.ok("Ocurrió un inconveniente, por favor vuelva a intentarlo luego");
+                responseAccount.setMessage("Ocurrió un inconveniente, por favor vuelva a intentarlo luego");
+                //return ResponseEntity.ok("Ocurrió un inconveniente, por favor vuelva a intentarlo luego");
             }
+
         }catch (Exception e) {
-            return ResponseEntity.ok(e.getMessage());
+            responseAccount.setMessage(e.getMessage());
+
         }
+        return new ResponseEntity<>(responseAccount, HttpStatus.OK);
     }
 
 }
