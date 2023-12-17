@@ -21,31 +21,38 @@ public class SimSwappingController {
 
     @ResponseBody
     @RequestMapping(value = "createOperation", method = RequestMethod.POST)
-    public ResponseEntity createOoperation(@RequestBody BodyOperation bodyOperation) throws IOException {
+    public ResponseEntity<ResponseOperation> createOoperation(@RequestBody BodyOperation bodyOperation) throws IOException {
+        ResponseOperation responseOperation = new ResponseOperation();
         try{
-
-            //1. Validamos Huella digital
-
-            //2. Validamos radio de Geolocalización
+            //1. Validamos radio de Geolocalización
                 //Obtenemos datos del usuario
             Usuario objUsuario =  simSwappingService.getDataUsuario(bodyOperation.getId_usuario());
 
             if (Utils.isOnRadio(bodyOperation.getLatitud(), bodyOperation.getLongitud(),
                     objUsuario.getLatitude(), objUsuario.getLatitude())) {
 
-            }
-            //3. Mensaje de texto para confirmar operación
+                //3. Mensaje de texto para confirmar operación
 
 
-            if(simSwappingService.createOperation(bodyOperation) == 1){
-                return ResponseEntity.ok("Registro exitoso");
+                if(simSwappingService.createOperation(bodyOperation) == 1){
+                    responseOperation.setSuccess(true);
+                    responseOperation.setMessage("Registro exitoso");
+                }else {
+                    responseOperation.setSuccess(false);
+                    responseOperation.setMessage("Error al crear la operación");
+                }
             }else {
-                return ResponseEntity.ok("Error al crear la operación");
+                responseOperation.setSuccess(false);
+                responseOperation.setMessage("No se encuentra dentro del rango permitido");
             }
 
         } catch (Exception e){
-            return ResponseEntity.ok(e.getMessage());
+            responseOperation.setSuccess(false);
+            responseOperation.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseOperation, HttpStatus.OK);
+
         }
+        return new ResponseEntity<>(responseOperation, HttpStatus.OK);
     }
 
 
@@ -55,11 +62,15 @@ public class SimSwappingController {
         ResponseAccount responseAccount = new ResponseAccount();
 
         Usuario objUsuario = null;
+        Cuenta objCuenta = null;
         try {
             List<Usuario> lstUsuario = simSwappingService.login(bodyLogin);
             if(lstUsuario != null && lstUsuario.size() > 0){
                 objUsuario = lstUsuario.get(0);
-
+                objCuenta = simSwappingService.getCuentaByUsuario(objUsuario.getId_usuario());
+                if(objCuenta!= null) {
+                    responseAccount.setCuenta(objCuenta);
+                }
                 if(objUsuario!=null) {
                     responseAccount.setUsuario(objUsuario);
 

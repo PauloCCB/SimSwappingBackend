@@ -4,16 +4,25 @@ import java.io.Serializable;
 
 public class Usuario implements Serializable {
 
+    private int id_usuario;
     private String nombre;
     private String apellido;
     private String dni;
-    private String acc;
+    private String cc;
     private String pin;
     private double latitude;
     private double longitude;
     private String imei;
 
     private String telefono;
+
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
+    }
 
     public String getTelefono() {
         return telefono;
@@ -47,15 +56,13 @@ public class Usuario implements Serializable {
         this.dni = dni;
     }
 
-    public String getAcc() {
-        return acc;
+    public String getCc() {
+        return cc;
     }
 
-    public void setAcc(String acc) {
-        this.acc = acc;
+    public void setCc(String cc) {
+        this.cc = cc;
     }
-
-
 
     public String getPin() {
         return pin;

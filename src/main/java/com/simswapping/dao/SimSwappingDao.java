@@ -13,4 +13,6 @@ public interface SimSwappingDao {
     Integer createOperation(BodyOperation bodyOperation) throws Exception;
 
     Usuario getDataUsuario(Integer idUsuario) throws Exception;
+
+    Cuenta getCuentaByUsuario(Integer idUsuario) throws Exception;
 }

@@ -73,7 +73,8 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
                 new SqlParameter("in_pin", Types.VARCHAR),
                 new SqlParameter("in_imei", Types.VARCHAR));
 
-        jdbcCall.returningResultSet("RESULT_SET", BeanPropertyRowMapper.newInstance(Usuario.class));
+        jdbcCall.returningResultSet("RESULT_SET",
+                BeanPropertyRowMapper.newInstance(Usuario.class));
         Map<String, Object> inParamMap = new HashMap<String, Object>();
         inParamMap.put("in_acc", bodyLogin.getCc());
         inParamMap.put("in_pin", bodyLogin.getPin());
@@ -135,6 +136,30 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
         List<Usuario> lstUsuarios = (List<Usuario>) result.get("RESULT_SET");
         if(lstUsuarios != null && lstUsuarios.size() > 0){
             return lstUsuarios.get(0);
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public Cuenta getCuentaByUsuario(Integer idUsuario) throws Exception {
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        jdbcCall.withSchemaName("sch_simulator");
+        jdbcCall.withProcedureName("sp_list_cuenta_by_id");
+        jdbcCall.withoutProcedureColumnMetaDataAccess();
+        jdbcCall.declareParameters(
+                new SqlParameter("in_id_usuario", Types.INTEGER));
+        jdbcCall.returningResultSet("RESULT_SET",
+                BeanPropertyRowMapper.newInstance(Cuenta.class));
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("in_id_usuario", idUsuario);
+
+        Map<String, Object> result = jdbcCall.execute(inParamMap);
+
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        List<Cuenta> lstCuenta = (List<Cuenta>) result.get("RESULT_SET");
+        if(lstCuenta != null && lstCuenta.size() > 0){
+            return lstCuenta.get(0);
         }else {
             return null;
         }

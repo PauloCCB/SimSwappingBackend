@@ -36,4 +36,9 @@ public class SimSwappingServiceImpl implements SimSwappingService {
         return simSwappingDao.getDataUsuario(idUsuario);
     }
 
+    @Override
+    public Cuenta getCuentaByUsuario(Integer idUsuario) throws Exception {
+        return simSwappingDao.getCuentaByUsuario(idUsuario);
+    }
+
 }
