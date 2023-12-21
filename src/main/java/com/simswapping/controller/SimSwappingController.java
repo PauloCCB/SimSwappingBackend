@@ -24,15 +24,14 @@ public class SimSwappingController {
     public ResponseEntity<ResponseOperation> createOoperation(@RequestBody BodyOperation bodyOperation) throws IOException {
         ResponseOperation responseOperation = new ResponseOperation();
         try{
-            //1. Validamos radio de Geolocalización
-                //Obtenemos datos del usuario
-            Usuario objUsuario =  simSwappingService.getDataUsuario(bodyOperation.getId_usuario());
 
+            //1. Obtenemos datos del usuario
+            Usuario objUsuario =  simSwappingService.getDataUsuario(bodyOperation.getId_usuario());
+            //2. Validamos radio de Geolocalización
             if (Utils.isOnRadio(bodyOperation.getLatitud(), bodyOperation.getLongitud(),
                     objUsuario.getLatitude(), objUsuario.getLatitude())) {
 
                 //3. Mensaje de texto para confirmar operación
-
 
                 if(simSwappingService.createOperation(bodyOperation) == 1){
                     responseOperation.setSuccess(true);
@@ -47,6 +46,7 @@ public class SimSwappingController {
             }
 
         } catch (Exception e){
+            e.printStackTrace();
             responseOperation.setSuccess(false);
             responseOperation.setMessage(e.getMessage());
             return new ResponseEntity<>(responseOperation, HttpStatus.OK);
@@ -78,8 +78,13 @@ public class SimSwappingController {
                         responseAccount.setSuccess(false);//Está dentro del radio y debería fallar
                         responseAccount.setMessage("Cuenta fuera de la ubicación permitida, su cuenta acaba de ser bloqueada");
                     } else {
-                        responseAccount.setSuccess(true);
-                        responseAccount.setMessage("Inicio de sesión con éxito.");
+
+                        //Actualizamos la nueva ubicación
+                        Integer resultado = simSwappingService.updateUserLocation(objUsuario.getId_usuario(), bodyLogin.getLatitude(),bodyLogin.getLongitude());
+                        if(resultado == 0) {
+                            responseAccount.setSuccess(true);
+                            responseAccount.setMessage("Inicio de sesión con éxito.");
+                        }
                     }
                 }
             } else {

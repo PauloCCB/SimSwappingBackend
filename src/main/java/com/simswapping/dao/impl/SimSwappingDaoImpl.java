@@ -165,4 +165,30 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
         }
 
     }
+
+
+    @Override
+    public Integer updateUserLocation(Integer idUsuario, double latitud, double longitud) throws Exception {
+        Integer result = 0;
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        jdbcCall.withSchemaName("sch_simulator");
+        jdbcCall.withProcedureName("sp_update_user_location");
+        jdbcCall.withoutProcedureColumnMetaDataAccess();
+        jdbcCall.declareParameters(
+                new SqlParameter("in_id_usuario", Types.INTEGER),
+                new SqlParameter("in_latitud", Types.DOUBLE),
+                new SqlParameter("in_longitud", Types.DOUBLE),
+                new SqlOutParameter("resultado", Types.INTEGER));
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("in_id_usuario", idUsuario);
+        inParamMap.put("in_latitud", latitud);
+        inParamMap.put("in_longitud", longitud);
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        //jdbcCall.returningResultSet("resultado", cuentaDaoDefinition);
+        //return  (Cuenta) jdbcCall.executeObject(List.class, in).get(0);
+
+        result = jdbcCall.executeObject(Integer.class, in);
+        return result;
+
+    }
 }
