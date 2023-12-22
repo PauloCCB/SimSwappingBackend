@@ -5,7 +5,7 @@ public class Utils {
     // Constante radial de la Tierra en metros
     private static final double EARTH_RADIUS = 6371000;
 
-    private static final double RADIOUS_METER = 50;
+    private static final double RADIOUS_METER = 200;
 
     public static double calcDistance(double latitud1, double longitud1, double latitud2, double longitud2) {
         double dLat = Math.toRadians(latitud2 - latitud1);

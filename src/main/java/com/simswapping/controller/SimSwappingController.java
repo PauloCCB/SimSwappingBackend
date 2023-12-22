@@ -80,10 +80,13 @@ public class SimSwappingController {
                     } else {
 
                         //Actualizamos la nueva ubicación
-                        Integer resultado = simSwappingService.updateUserLocation(objUsuario.getId_usuario(), bodyLogin.getLatitude(),bodyLogin.getLongitude());
-                        if(resultado == 0) {
+                        Integer resultado = simSwappingService.updateUserLocation(objUsuario.getId_usuario(), objUsuario.getLatitude(),objUsuario.getLongitude());
+                        if(resultado == 1) {
                             responseAccount.setSuccess(true);
                             responseAccount.setMessage("Inicio de sesión con éxito.");
+                        }else {
+                            responseAccount.setSuccess(false);
+                            responseAccount.setMessage("Error al actualizar ubicación.");
                         }
                     }
                 }
@@ -93,6 +96,8 @@ public class SimSwappingController {
             }
 
         } catch (Exception e) {
+            responseAccount.setSuccess(false);
+            responseAccount.setMessage(e.getMessage()+ " " + e.getCause());
             throw new RuntimeException(e);
         }
         return new ResponseEntity<>(responseAccount, HttpStatus.OK);
