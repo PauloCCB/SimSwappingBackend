@@ -28,21 +28,26 @@ public class SimSwappingController {
             //1. Obtenemos datos del usuario
             Usuario objUsuario =  simSwappingService.getDataUsuario(bodyOperation.getId_usuario());
             //2. Validamos radio de Geolocalización
-            if (Utils.isOnRadio(bodyOperation.getLatitud(), bodyOperation.getLongitud(),
-                    objUsuario.getLatitude(), objUsuario.getLatitude())) {
+            if(objUsuario != null) {
+                if (Utils.isOnRadio(bodyOperation.getLatitud(), bodyOperation.getLongitud(),
+                        objUsuario.getLatitude(), objUsuario.getLatitude())) {
 
-                //3. Mensaje de texto para confirmar operación
+                    //3. Mensaje de texto para confirmar operación
 
-                if(simSwappingService.createOperation(bodyOperation) == 1){
-                    responseOperation.setSuccess(true);
-                    responseOperation.setMessage("Registro exitoso");
-                }else {
+                    if (simSwappingService.createOperation(bodyOperation) == 1) {
+                        responseOperation.setSuccess(true);
+                        responseOperation.setMessage("Registro exitoso");
+                    } else {
+                        responseOperation.setSuccess(false);
+                        responseOperation.setMessage("Error al crear la operación");
+                    }
+                } else {
                     responseOperation.setSuccess(false);
-                    responseOperation.setMessage("Error al crear la operación");
+                    responseOperation.setMessage("Fuera del rango permitido -DatosBD:" + "Lat:"+objUsuario.getLatitude() + "Long:"+objUsuario.getLongitude() + " - BodyOperation: Lat:"+ bodyOperation.getLatitud() + " Long:"+bodyOperation.getLongitud());
                 }
             }else {
                 responseOperation.setSuccess(false);
-                responseOperation.setMessage("No se encuentra dentro del rango permitido");
+                responseOperation.setMessage("Usuario no encontrado Id:"+bodyOperation.getId_usuario().toString());
             }
 
         } catch (Exception e){

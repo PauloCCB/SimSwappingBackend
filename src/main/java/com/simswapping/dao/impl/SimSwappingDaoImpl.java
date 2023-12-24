@@ -120,23 +120,28 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
 
     @Override
     public Usuario getDataUsuario(Integer idUsuario) throws Exception {
-        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
-        jdbcCall.withSchemaName("sch_simulator");
-        jdbcCall.withProcedureName("sp_list_usuario_by_id");
-        jdbcCall.withoutProcedureColumnMetaDataAccess();
-        jdbcCall.declareParameters(
-                new SqlParameter("in_id_usuario", Types.INTEGER));
-        jdbcCall.returningResultSet("RESULT_SET", BeanPropertyRowMapper.newInstance(Usuario.class));
-        Map<String, Object> inParamMap = new HashMap<String, Object>();
-        inParamMap.put("in_id_usuario", idUsuario);
+        try{
+            jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+            jdbcCall.withSchemaName("sch_simulator");
+            jdbcCall.withProcedureName("sp_list_usuario_by_id");
+            jdbcCall.withoutProcedureColumnMetaDataAccess();
+            jdbcCall.declareParameters(
+                    new SqlParameter("in_id_usuario", Types.INTEGER));
+            jdbcCall.returningResultSet("RESULT_SET", BeanPropertyRowMapper.newInstance(Usuario.class));
+            Map<String, Object> inParamMap = new HashMap<String, Object>();
+            inParamMap.put("in_id_usuario", idUsuario);
 
-        Map<String, Object> result = jdbcCall.execute(inParamMap);
+            Map<String, Object> result = jdbcCall.execute(inParamMap);
 
-        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
-        List<Usuario> lstUsuarios = (List<Usuario>) result.get("RESULT_SET");
-        if(lstUsuarios != null && lstUsuarios.size() > 0){
-            return lstUsuarios.get(0);
-        }else {
+            SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+            List<Usuario> lstUsuarios = (List<Usuario>) result.get("RESULT_SET");
+            if(lstUsuarios != null && lstUsuarios.size() > 0){
+                return lstUsuarios.get(0);
+            }else {
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }
