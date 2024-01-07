@@ -18,4 +18,8 @@ public interface SimSwappingService {
     Cuenta getCuentaByUsuario(Integer idUsuario) throws Exception;
 
     Integer updateUserLocation(Integer idUsuario, double latitude, double longitude) throws Exception;
+
+    List<Ubicaciones> getLocations(Integer idUsuario) throws Exception;
+
+    Integer registerLocation(Integer idUsuario, double latitud, double longitud) throws Exception;
 }

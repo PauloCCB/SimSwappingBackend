@@ -196,4 +196,56 @@ public class SimSwappingDaoImpl implements SimSwappingDao {
         return result;
 
     }
+
+    @Override
+    public List<Ubicaciones> getLocations(Integer idUsuario) throws Exception {
+        //Integer result = 0;
+
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        jdbcCall.withSchemaName("sch_simulator");
+        jdbcCall.withProcedureName("sp_list_ubicaciones_by_usuario");
+        jdbcCall.withoutProcedureColumnMetaDataAccess();
+        jdbcCall.declareParameters(
+                new SqlParameter("in_id_usuario", Types.INTEGER));
+
+        jdbcCall.returningResultSet("RESULT_SET",
+                BeanPropertyRowMapper.newInstance(Ubicaciones.class));
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("in_id_usuario", idUsuario);
+
+        Map<String, Object> result = jdbcCall.execute(inParamMap);
+
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        List<Ubicaciones> lstUbicaciones = (List<Ubicaciones>) result.get("RESULT_SET");
+
+        return lstUbicaciones;
+    }
+
+
+    @Override
+    public Integer registerLocation(Integer idUsuario, double latitud, double longitud) throws Exception {
+        Integer result = 0;
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        jdbcCall.withSchemaName("sch_simulator");
+        jdbcCall.withProcedureName("sp_register_location");
+        jdbcCall.withoutProcedureColumnMetaDataAccess();
+        jdbcCall.declareParameters(
+                new SqlParameter("in_id_usuario", Types.INTEGER),
+                new SqlParameter("in_latitud", Types.DOUBLE),
+                new SqlParameter("in_longitud", Types.DOUBLE),
+                new SqlOutParameter("resultado", Types.INTEGER));
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("in_id_usuario", idUsuario);
+        inParamMap.put("in_latitud", latitud);
+        inParamMap.put("in_longitud", longitud);
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        //jdbcCall.returningResultSet("resultado", cuentaDaoDefinition);
+        //return  (Cuenta) jdbcCall.executeObject(List.class, in).get(0);
+
+        result = jdbcCall.executeObject(Integer.class, in);
+        return result;
+
+    }
+
+
 }

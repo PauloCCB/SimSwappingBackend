@@ -17,4 +17,8 @@ public interface SimSwappingDao {
     Cuenta getCuentaByUsuario(Integer idUsuario) throws Exception;
 
     Integer updateUserLocation(Integer idUsuario, double latitud, double longitud) throws Exception;
+
+    List<Ubicaciones> getLocations(Integer idUsuario) throws Exception;
+
+    Integer registerLocation(Integer idUsuario, double latitud, double longitud) throws Exception;
 }

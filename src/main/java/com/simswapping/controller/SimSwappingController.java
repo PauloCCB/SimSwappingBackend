@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.simswapping.service.SimSwappingService;
 
+import javax.websocket.server.PathParam;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -130,4 +132,50 @@ public class SimSwappingController {
         return new ResponseEntity<>(responseAccount, HttpStatus.OK);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "getLocations", method = RequestMethod.GET)
+    public ResponseEntity<ResponseUbicaciones> obtenerUbicaciones(@RequestParam("idUsuario") Integer idUsuario) throws IOException {
+        ResponseUbicaciones responseUbicaciones = new ResponseUbicaciones();
+        try{
+            List<Ubicaciones> lstUbicaciones = simSwappingService.getLocations(idUsuario);
+            responseUbicaciones.setLstUbicaciones(lstUbicaciones);
+            responseUbicaciones.setMessage("Exito");
+                //return ResponseEntity.ok("Ocurrió un inconveniente, por favor vuelva a intentarlo luego");
+
+        }catch (Exception e) {
+            responseUbicaciones.setMessage(e.getMessage());
+
+        }
+        return new ResponseEntity<>(responseUbicaciones, HttpStatus.OK);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "registerLocation", method = RequestMethod.POST)
+        public ResponseEntity<ResponseUbicaciones> registerLocation(@RequestBody Ubicaciones bodyUbicacion) throws IOException {
+        ResponseUbicaciones responseUbicaciones = new ResponseUbicaciones();
+
+        Integer resultado = 0;
+        try {
+            resultado = simSwappingService.registerLocation(
+                    bodyUbicacion.getId_usuario(),
+                    Double.parseDouble(bodyUbicacion.getLatitud()),
+                    Double.parseDouble(bodyUbicacion.getLongitud()));
+
+            if (resultado == 1) {
+                responseUbicaciones.setSuccess(true);
+                responseUbicaciones.setMessage("Registro de ubicación con éxito.");
+            } else if (resultado == 0){
+                responseUbicaciones.setSuccess(true);
+                responseUbicaciones.setMessage("Ubicación eliminada.");
+            }else {
+                responseUbicaciones.setSuccess(false);
+                responseUbicaciones.setMessage("Ubicación errada.");
+            }
+        } catch (Exception e) {
+            responseUbicaciones.setSuccess(false);
+            responseUbicaciones.setMessage(e.getMessage());
+        }
+        return new ResponseEntity<>(responseUbicaciones, HttpStatus.OK);
+    }
 }

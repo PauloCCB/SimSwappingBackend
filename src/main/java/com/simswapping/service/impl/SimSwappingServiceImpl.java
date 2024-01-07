@@ -46,4 +46,15 @@ public class SimSwappingServiceImpl implements SimSwappingService {
         return simSwappingDao.updateUserLocation(idUsuario,latitud,longitud);
     }
 
+    @Override
+    public List<Ubicaciones> getLocations(Integer idUsuario) throws Exception {
+        return simSwappingDao.getLocations(idUsuario);
+    }
+
+    @Override
+    public Integer registerLocation(Integer idUsuario, double latitud, double longitud) throws Exception {
+        return simSwappingDao.registerLocation(idUsuario,latitud,longitud);
+    }
+
+
 }
