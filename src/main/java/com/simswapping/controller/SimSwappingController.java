@@ -25,17 +25,41 @@ public class SimSwappingController {
     @RequestMapping(value = "createOperation", method = RequestMethod.POST)
     public ResponseEntity<ResponseOperation> createOoperation(@RequestBody BodyOperation bodyOperation) throws IOException {
         ResponseOperation responseOperation = new ResponseOperation();
-        try{
+        try {
 
             //1. Obtenemos datos del usuario
-            Usuario objUsuario =  simSwappingService.getDataUsuario(bodyOperation.getId_usuario());
-            //2. Validamos radio de Geolocalización
-            if(objUsuario != null) {
-                if (Utils.isOnRadio(bodyOperation.getLatitud(), bodyOperation.getLongitud(),
-                        objUsuario.getLatitude(), objUsuario.getLatitude())) {
+            //Usuario objUsuario = simSwappingService.getDataUsuario(bodyOperation.getId_usuario());
+            //Obtenemos la ubicación del usuario registrada
+            List<Ubicaciones> lstUbicaciones = simSwappingService.getLocations(bodyOperation.getId_usuario());
+            Cuenta objCuenta = simSwappingService.getCuentaByUsuario(bodyOperation.getId_usuario());
+            //Validamos cada ubicación si se encuentra dentro del rango
+            boolean isOnRadio = false;
+            for (Ubicaciones objUbicacion : lstUbicaciones){
+                if(Utils.isOnRadio(bodyOperation.getLatitud(),bodyOperation.getLongitud(),
+                        objUbicacion.getLatitud(),objUbicacion.getLongitud())){
+                    isOnRadio = true;
+                    break;
+                }
+            }
 
-                    //3. Mensaje de texto para confirmar operación
+            if(isOnRadio) {
+                //Dentro del radio se puede mover hasta el 100% del saldo del usuario
+                if (simSwappingService.createOperation(bodyOperation) == 1) {
+                    responseOperation.setSuccess(true);
+                    responseOperation.setMessage("Registro exitoso");
+                } else {
+                    responseOperation.setSuccess(false);
+                    responseOperation.setMessage("Error al crear la operación");
+                }
 
+            }else {
+                //Fuera de los puntos de geolocalización solo se puede realizar el 40% del saldo
+                double maxMonto = objCuenta.getSaldo() * 0.4;
+                if(bodyOperation.getMonto() > maxMonto){
+                    //Se rechaza la operación
+                    responseOperation.setSuccess(false);
+                    responseOperation.setMessage("Monto excede el máximo permitido");
+                }else {
                     if (simSwappingService.createOperation(bodyOperation) == 1) {
                         responseOperation.setSuccess(true);
                         responseOperation.setMessage("Registro exitoso");
@@ -43,14 +67,27 @@ public class SimSwappingController {
                         responseOperation.setSuccess(false);
                         responseOperation.setMessage("Error al crear la operación");
                     }
-                } else {
+
+                }
+            }
+
+            //2. Validamos radio de Geolocalización
+            //if(objUsuario != null) {
+                /*if (Utils.isOnRadio(bodyOperation.getLatitud(), bodyOperation.getLongitud(),
+                        objUsuario.getLatitude(), objUsuario.getLatitude())) {*/
+
+                //3. Mensaje de texto para confirmar operación
+
+
+                /*} else {
                     responseOperation.setSuccess(false);
                     responseOperation.setMessage("Fuera del rango permitido -DatosBD:" + "Lat:"+objUsuario.getLatitude() + "Long:"+objUsuario.getLongitude() + " - BodyOperation: Lat:"+ bodyOperation.getLatitud() + " Long:"+bodyOperation.getLongitud());
-                }
-            }else {
-                responseOperation.setSuccess(false);
-                responseOperation.setMessage("Usuario no encontrado Id:"+bodyOperation.getId_usuario().toString());
-            }
+                */
+            /*}else{
+                    responseOperation.setSuccess(false);
+                    responseOperation.setMessage("Usuario no encontrado Id:" + bodyOperation.getId_usuario().toString());
+            }*/
+
 
         } catch (Exception e){
             e.printStackTrace();
@@ -159,8 +196,8 @@ public class SimSwappingController {
         try {
             resultado = simSwappingService.registerLocation(
                     bodyUbicacion.getId_usuario(),
-                    Double.parseDouble(bodyUbicacion.getLatitud()),
-                    Double.parseDouble(bodyUbicacion.getLongitud()));
+                    bodyUbicacion.getLatitud(),
+                    bodyUbicacion.getLongitud());
 
             if (resultado == 1) {
                 responseUbicaciones.setSuccess(true);

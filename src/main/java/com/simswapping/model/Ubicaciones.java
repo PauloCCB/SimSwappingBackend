@@ -6,8 +6,8 @@ public class Ubicaciones implements Serializable {
 
     private int id_ubicacion;
     private int id_usuario;
-    private String latitud;
-    private String longitud;
+    private Double latitud;
+    private Double longitud;
     private String estado;
 
     public int getId_ubicacion() {
@@ -26,19 +26,19 @@ public class Ubicaciones implements Serializable {
         this.id_usuario = id_usuario;
     }
 
-    public String getLatitud() {
+    public Double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public Double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(Double longitud) {
         this.longitud = longitud;
     }
 

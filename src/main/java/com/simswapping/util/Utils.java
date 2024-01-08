@@ -1,5 +1,9 @@
 package com.simswapping.util;
 
+import org.geotools.referencing.GeodeticCalculator;
+
+import javax.xml.crypto.dsig.TransformException;
+
 public class Utils {
 
     // Constante radial de la Tierra en metros
@@ -7,8 +11,8 @@ public class Utils {
 
     private static final double RADIOUS_METER = 200;
 
-    public static double calcDistance(double latitud1, double longitud1, double latitud2, double longitud2) {
-        double dLat = Math.toRadians(latitud2 - latitud1);
+    public static double calcDistance(double latitudReferencia, double longitudReferencia, double latitudPunto, double longitudPunto) throws Exception {
+        /*double dLat = Math.toRadians(latitud2 - latitud1);
         double dLon = Math.toRadians(longitud2 - longitud1);
 
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -17,7 +21,13 @@ public class Utils {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return EARTH_RADIUS * c;
+        return EARTH_RADIUS * c;*/
+        GeodeticCalculator calculator = new GeodeticCalculator();
+        calculator.setStartingGeographicPoint(longitudReferencia, latitudReferencia);
+        calculator.setDestinationGeographicPoint(longitudPunto, latitudPunto);
+
+        //return calculator.getOrthodromicDistance();
+        return calculator.getOrthodromicDistance();
     }
 
     /**
@@ -31,8 +41,11 @@ public class Utils {
     public static boolean isOnRadio(double latitudReferencia,
                                     double longitudReferencia,
                                     double latitudPunto,
-                                    double longitudPunto) {
+                                    double longitudPunto) throws Exception {
+            /*double distancia = calcDistance(latitudReferencia, longitudReferencia, latitudPunto, longitudPunto);
+            return (distancia <= (RADIOUS_METER + MARGEN_ERROR));*/
         double distancia = calcDistance(latitudReferencia, longitudReferencia, latitudPunto, longitudPunto);
         return distancia <= RADIOUS_METER;
+
     }
 }
