@@ -1,8 +1,5 @@
 package com.simswapping.util;
 
-import org.geotools.referencing.GeodeticCalculator;
-
-import javax.xml.crypto.dsig.TransformException;
 
 public class Utils {
 
@@ -12,22 +9,22 @@ public class Utils {
     private static final double RADIOUS_METER = 200;
 
     public static double calcDistance(double latitudReferencia, double longitudReferencia, double latitudPunto, double longitudPunto) throws Exception {
-        /*double dLat = Math.toRadians(latitud2 - latitud1);
-        double dLon = Math.toRadians(longitud2 - longitud1);
+        double dLat = Math.toRadians(latitudPunto - latitudReferencia);
+        double dLon = Math.toRadians(longitudPunto - longitudReferencia);
 
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(latitud1)) * Math.cos(Math.toRadians(latitud2)) *
+                Math.cos(Math.toRadians(latitudReferencia)) * Math.cos(Math.toRadians(latitudPunto)) *
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return EARTH_RADIUS * c;*/
-        GeodeticCalculator calculator = new GeodeticCalculator();
+        return EARTH_RADIUS * c;
+        /*GeodeticCalculator calculator = new GeodeticCalculator();
         calculator.setStartingGeographicPoint(longitudReferencia, latitudReferencia);
         calculator.setDestinationGeographicPoint(longitudPunto, latitudPunto);
 
         //return calculator.getOrthodromicDistance();
-        return calculator.getOrthodromicDistance();
+        return calculator.getOrthodromicDistance();*/
     }
 
     /**
