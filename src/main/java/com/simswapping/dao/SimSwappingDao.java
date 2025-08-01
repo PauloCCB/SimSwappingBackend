@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SimSwappingDao {
 
-    Integer registerAccount(BodyAccount bodyAccount);
+    Integer registerAccount(BodyAccount bodyAccount); 
 
     List<Usuario> login(BodyLogin bodyLogin) throws Exception;
 
